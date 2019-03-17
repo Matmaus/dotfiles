@@ -1,6 +1,7 @@
 #!/bin/sh
 # Author: Matej Kastak
-# Start Date: 31.3.2017
+#         Matus Jasnicky
+# Start Date: 17.3.2019
 #
 # Description:
 #      This script will copy(symlink) all files to home directory
@@ -54,7 +55,9 @@ INSTALL_PEDA=0
 INSTALL_PEDA_REPO="longld/peda"
 INSTALL_PEDA_PATH="/home/$USER/.peda"
 INSTALL_TMUX_PLUGINS=0
-INSTALL_TMUX_PLUGINS_REPO="tmux-plugins/tpm"
+INSTALL_TMUX_PLUGINS_REPO1="tmux-plugins/tpm"
+INSTALL_TMUX_PLUGINS_REPO2="tmux-plugins/tmux-sensible"
+INSTALL_TMUX_PLUGINS_REPO3="tmux-plugins/tmux-resurrect"
 INSTALL_TMUX_PLUGINS_PATH="/home/$USER/.tmux/plugins/tmp"
 INSTALL_VIM_PLUGINS=0
 INSTALL_VIM_PLUGINS_REPO="VundleVim/Vundle.vim"
@@ -195,7 +198,7 @@ done
 # And after that install them
 
 # .Xresources
-install_config "$XRESOURCES_CONFIG_FILE"
+# install_config "$XRESOURCES_CONFIG_FILE"
 # .bashrc
 install_config "$BASHRC_CONFIG_FILE"
 # .bash_profile
@@ -203,15 +206,15 @@ install_config "$BASH_PROFILE_CONFIG_FILE"
 # .tmux.conf
 install_config "$TMUX_CONFIG_FILE"
 # .vimrc
-install_config "$VIM_CONFIG_FILE"
+# install_config "$VIM_CONFIG_FILE"
 # .emacs.d/init.el
 install_config "$EMACS_CONFIG_FILE"
 # .config/i3/config
 install_config "$I3_CONFIG_FILE"
 # .config/polybar/config
-install_config "$POLYBAR_CONFIG_FILE"
+# install_config "$POLYBAR_CONFIG_FILE"
 # .config/polybar/launch.sh
-install_config "$POLYBAR_LAUNCH_FILE"
+# install_config "$POLYBAR_LAUNCH_FILE"
 # .config/ranger/rc.conf
 install_config "$RANGER_CONFIG_FILE"
 
@@ -220,7 +223,9 @@ if [ "$INSTALL_PEDA" -eq 1 ]; then
 fi
 
 if [ "$INSTALL_TMUX_PLUGINS" -eq 1 ]; then
-    install_module "$INSTALL_TMUX_PLUGINS_REPO" "$INSTALL_TMUX_PLUGINS_PATH"
+    install_module "$INSTALL_TMUX_PLUGINS_REPO1" "$INSTALL_TMUX_PLUGINS_PATH"
+    install_module "$INSTALL_TMUX_PLUGINS_REPO2" "$INSTALL_TMUX_PLUGINS_PATH"
+    install_module "$INSTALL_TMUX_PLUGINS_REPO3" "$INSTALL_TMUX_PLUGINS_PATH"
 fi
 
 if [ "$INSTALL_VIM_PLUGINS" -eq 1 ]; then
