@@ -1,6 +1,7 @@
 #!/bin/bash
 # Author: Matej Kastak
-# Start date: 2.4.2017
+#         Matus Jasnicky
+# Start date: 17.3.2019
 # Modification of great bash config from:
 # https://natelandau.com/my-mac-osx-bash_profile/
 # ---------------------------------------------------------------------------
@@ -11,14 +12,17 @@
 export PS1="\[\e[32m\]\u\[\e[m\]@\h:\[\e[31m\][\[\e[m\]\W\[\e[31m\]]\[\e[m\]\\$ "
 
 # Set Paths
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11R6/bin:/usr/local/bin"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin:$PATH"
+
+# Better yaourt colors
+export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 
 # Set default Editor
-# If emacs is installed use that option otherwise select vim as default editor
+# If emacs is installed use that option otherwise select nano as default editor
 if command -v emacsclient >/dev/null 2>&1; then
     export EDITOR="emacsclient -t"
 else
-    export EDITOR=/usr/bin/vim
+    export EDITOR=/usr/bin/nano
 fi
 
 # Set default blocksize for ls, df, du
@@ -27,31 +31,135 @@ export BLOCKSIZE=1k
 # export CLICOLOR=1
 # export LSCOLORS=ExFxBxDxCxegedabagacad
 
-# bind TAB:menu-complete
+# Bind TAB:menu-complete
 complete -cf sudo
 complete -cf man
 
-# extract:  Extract most know archives with one command
+# xhost +local:root > /dev/null 2>&1
+
+# Bash won't get SIGWINCH if another process is in the foreground.
+# Enable checkwinsize so that bash will check the terminal size when
+# it regains control.  #65623
+# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
+shopt -s checkwinsize
+
+shopt -s expand_aliases
+
+# Enable history appending instead of overwriting.  #139609
+shopt -s histappend
+
+# Extract most know archives with one command
+# Usage: ex <file>
 extract () {
     if [ -f $1 ] ; then
-	case $1 in
-	    *.tar.bz2)   tar xjf $1     ;;
-	    *.tar.gz)    tar xzf $1     ;;
-	    *.bz2)       bunzip2 $1     ;;
-	    *.rar)       unrar e $1     ;;
-	    *.gz)        gunzip $1      ;;
-	    *.tar)       tar xf $1      ;;
-	    *.tbz2)      tar xjf $1     ;;
-	    *.tgz)       tar xzf $1     ;;
-	    *.zip)       unzip $1       ;;
-	    *.Z)         uncompress $1  ;;
-	    *.7z)        7z x $1        ;;
-	    *)     echo "'$1' cannot be extracted via extract()" ;;
-	esac
+        case $1 in
+            *.tar.bz2)   tar xjf $1     ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar e $1     ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xf $1      ;;
+            *.tbz2)      tar xjf $1     ;;
+            *.tgz)       tar xzf $1     ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)     echo "'$1' cannot be extracted via extract()" ;;
+        esac
     else
-	echo "'$1' is not a valid file"
+    echo "'$1' is not a valid file"
     fi
 }
+
+################################################ COLOURS ###################################
+# [[ $- != *i* ]] && return
+
+# colors() {
+#   local fgc bgc vals seq0
+
+#   printf "Color escapes are %s\n" '\e[${value};...;${value}m'
+#   printf "Values 30..37 are \e[33mforeground colors\e[m\n"
+#   printf "Values 40..47 are \e[43mbackground colors\e[m\n"
+#   printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
+
+#   # foreground colors
+#   for fgc in {30..37}; do
+#       # background colors
+#       for bgc in {40..47}; do
+#           fgc=${fgc#37} # white
+#           bgc=${bgc#40} # black
+
+#           vals="${fgc:+$fgc;}${bgc}"
+#           vals=${vals%%;}
+
+#           seq0="${vals:+\e[${vals}m}"
+#           printf "  %-9s" "${seq0:-(default)}"
+#           printf " ${seq0}TEXT\e[m"
+#           printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
+#       done
+#       echo; echo
+#   done
+# }
+
+# [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+
+# # Change the window title of X terminals
+# case ${TERM} in
+#   xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
+#       PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+#       ;;
+#   screen*)
+#       PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+#       ;;
+# esac
+
+# use_color=true
+
+# # Set colorful PS1 only on colorful terminals.
+# # dircolors --print-database uses its own built-in database
+# # instead of using /etc/DIR_COLORS.  Try to use the external file
+# # first to take advantage of user additions.  Use internal bash
+# # globbing instead of external grep binary.
+# safe_term=${TERM//[^[:alnum:]]/?}   # sanitize TERM
+# match_lhs=""
+# [[ -f ~/.dir_colors   ]] && match_lhs="${match_lhs}$(<~/.dir_colors)"
+# [[ -f /etc/DIR_COLORS ]] && match_lhs="${match_lhs}$(</etc/DIR_COLORS)"
+# [[ -z ${match_lhs}    ]] \
+#   && type -P dircolors >/dev/null \
+#   && match_lhs=$(dircolors --print-database)
+# [[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
+
+# if ${use_color} ; then
+#   # Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
+#   if type -P dircolors >/dev/null ; then
+#       if [[ -f ~/.dir_colors ]] ; then
+#           eval $(dircolors -b ~/.dir_colors)
+#       elif [[ -f /etc/DIR_COLORS ]] ; then
+#           eval $(dircolors -b /etc/DIR_COLORS)
+#       fi
+#   fi
+
+#   if [[ ${EUID} == 0 ]] ; then
+#       PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
+#   else
+#       PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
+#   fi
+
+#   alias ls='ls --color=auto'
+#   alias grep='grep --colour=auto'
+#   alias egrep='egrep --colour=auto'
+#   alias fgrep='fgrep --colour=auto'
+# else
+#   if [[ ${EUID} == 0 ]] ; then
+#       # show root@ when we don't have colors
+#       PS1='\u@\h \W \$ '
+#   else
+#       PS1='\u@\h \w \$ '
+#   fi
+# fi
+
+# unset use_color safe_term match_lhs sh
+################################################ COLOURS ###################################
 
 # ii:  display useful host related informaton
 ii() {
@@ -80,33 +188,33 @@ ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name end
 #     if any of them fails use the POSIX standards.
 check_gnu_extesions() {
     if ! ls --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! cp --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! touch --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! ln --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! mv --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! rm --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! cut --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! find --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! sort --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! head --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! tail --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! awk --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     elif ! sed --version 2>/dev/null 1>&2; then
-	echo "posix"
+        echo "posix"
     else
-	echo "gnu"
+        echo "gnu"
     fi
 }
 
@@ -116,151 +224,16 @@ check_gnu_extesions() {
 check_os() {
     OSNAME=$(uname)
     if [ "$OSNAME" = "OpenBSD" ]; then
-	echo "bsd"
+        echo "bsd"
     elif [ "$OSNAME" = "FreeBSD" ]; then
-	echo "bsd"
+        echo "bsd"
     elif [ "$OSNAME" = "Linux" ]; then
-	echo "linux"
+        echo "linux"
     elif [ "$OSNAME" = "Darwin" ]; then
-	echo "mac"
+        echo "mac"
     else
-	echo "unknown"
+        echo "unknown"
     fi
-}
-
-# Function to set up a mac environment
-set_up_mac() {
-
-    export PATH="/opt/local/libexec/gnubin:$PATH:/usr/local/bin/"
-    export PATH="$HOME/.gem/ruby/2.3.0/bin:/usr/local/git/bin:/sw/bin/:/usr/local/bin:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
-
-    # cdf:  'Cd's to frontmost window of MacOS Finder
-    cdf () {
-	currFolderPath=$( /usr/bin/osascript <<EOT
-	    tell application "Finder"
-		try
-	    set currFolder to (folder of the front window as alias)
-		on error
-	    set currFolder to (path to desktop folder as alias)
-		end try
-		POSIX path of currFolder
-	    end tell
-EOT
-		      )
-	echo "cd to \"$currFolderPath\""
-	cd "$currFolderPath"
-    }
-
-    # vag: Start and ssh into vagrant machine
-    vag () {
-	if [ -f ~/vagrant/$1/Vagrantfile ] ; then
-	    cd ~/vagrant/$1 && vagrant up && vagrant ssh
-	else
-	    echo "'$1' is not valid vagrant machine."
-	fi
-    }
-
-    alias edit='subl'                           # edit:         Opens any file in sublime editor
-    alias f='open -a Finder ./'                 # f:            Opens current directory in MacOS Finder
-    alias youdown='youtube-dl --extract-audio --audio-format mp3 ' # youdown: Download youtube video
-    alias vagstart='vagrant up && vagrant ssh'  # vagarnat:     Start VM and connect to it via ssh
-    trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
-    ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
-    alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
-
-    # spotlight: Search for a file using MacOS Spotlight's metadata
-    spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
-
-    alias myip='curl ip.appspot.com'                    # myip:         Public facing IP Address
-    alias netCons='lsof -i'                             # netCons:      Show all open TCP/IP sockets
-    alias flushDNS='dscacheutil -flushcache'            # flushDNS:     Flush out the DNS Cache
-    alias lsock='sudo /usr/sbin/lsof -i -P'             # lsock:        Display open sockets
-    alias lsockU='sudo /usr/sbin/lsof -nP | grep UDP'   # lsockU:       Display only open UDP sockets
-    alias lsockT='sudo /usr/sbin/lsof -nP | grep TCP'   # lsockT:       Display only open TCP sockets
-    alias ipInfo0='ipconfig getpacket en0'              # ipInfo0:      Get info on connections for en0
-    alias ipInfo1='ipconfig getpacket en1'              # ipInfo1:      Get info on connections for en1
-    alias openPorts='sudo lsof -i | grep LISTEN'        # openPorts:    All listening connections
-    alias showBlocked='sudo ipfw list'                  # showBlocked:  All ipfw rules inc/ blocked IPs
-
-    alias mountReadWrite='/sbin/mount -uw /'    # mountReadWrite:   For use when booted into single-user
-
-    # cleanupDS:  Recursively delete .DS_Store files
-    alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
-
-    # finderShowHidden:   Show hidden files in Finder
-    # finderHideHidden:   Hide hidden files in Finder
-    alias finderShowHidden='defaults write com.apple.finder ShowAllFiles TRUE'
-    alias finderHideHidden='defaults write com.apple.finder ShowAllFiles FALSE'
-
-    # cleanupLS:  Clean up LaunchServices to remove duplicates in the "Open With" menu
-    alias cleanupLS="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
-
-    # screensaverDesktop: Run a screensaver on the Desktop
-    alias screensaverDesktop='/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background'
-
-    # Web development
-    alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
-    alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
-    alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
-    alias herr='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
-    alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
-    httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
-
-    # httpDebug:  Download a web page and show info on what took time
-    httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
-
-    #   Original reminders from the scipt
-    #
-    #   remove_disk: spin down unneeded disk
-    #   ---------------------------------------
-    #   diskutil eject /dev/disk1s3
-
-    #   to change the password on an encrypted disk image:
-    #   ---------------------------------------
-    #   hdiutil chpass /path/to/the/diskimage
-
-    #   to mount a read-only disk image as read-write:
-    #   ---------------------------------------
-    #   hdiutil attach example.dmg -shadow /tmp/example.shadow -noverify
-
-    #   mounting a removable drive (of type msdos or hfs)
-    #   ---------------------------------------
-    #   mkdir /Volumes/Foo
-    #   ls /dev/disk*   to find out the device to use in the mount command)
-    #   mount -t msdos /dev/disk1s1 /Volumes/Foo
-    #   mount -t hfs /dev/disk1s1 /Volumes/Foo
-
-    #   to create a file of a given size: /usr/sbin/mkfile or /usr/bin/hdiutil
-    #   ---------------------------------------
-    #   e.g.: mkfile 10m 10MB.dat
-    #   e.g.: hdiutil create -size 10m 10MB.dmg
-    #   the above create files that are almost all zeros - if random bytes are desired
-    #   then use: ~/Dev/Perl/randBytes 1048576 > 10MB.dat
-
-    ##
-    # Your previous /Users/mato/.bash_profile file was backed up as /Users/mato/.bash_profile.macports-saved_2015-08-17_at_18:50:41
-    ##
-
-    # MacPorts Installer addition on 2015-08-17_at_18:50:41: adding an appropriate PATH variable for use with MacPorts.
-    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-    # Finished adapting your PATH environment variable for use with MacPorts.
-
-    ##
-    # Your previous /Users/mato/.bash_profile file was backed up as /Users/mato/.bash_profile.macports-saved_2015-11-07_at_20:53:26
-    ##
-
-    # MacPorts Installer addition on 2015-11-07_at_20:53:26: adding an appropriate PATH variable for use with MacPorts.
-    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-    # Finished adapting your PATH environment variable for use with MacPorts.
-
-    ##
-    # Your previous /Users/mato/.bash_profile file was backed up as /Users/mato/.bash_profile.macports-saved_2015-11-07_at_21:35:24
-    ##
-
-    # MacPorts Installer addition on 2015-11-07_at_21:35:24: adding an appropriate PATH variable for use with MacPorts.
-    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-    # Finished adapting your PATH environment variable for use with MacPorts.
-
 }
 
 # Function to set up a linux environment
@@ -287,9 +260,11 @@ alias_gnu() {
     alias cp='cp -iv'                           # Preferred 'cp' implementation
     alias mv='mv -iv'                           # Preferred 'mv' implementation
     alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
+    alias df='df -h'                            # human-readable sizes
     alias ll='ls -FGlAhp --group-directories-first --color=auto' # Preferred 'ls' implementation
     alias ls='ls -G --group-directories-first --color=auto' # Preferred directory listing
     alias less='less -FSRXc'                    # Preferred 'less' implementation
+    alias free='free -m'                        # show sizes in MB
     cd() { builtin cd "$@"; ls; }               # Always list directory contents upon 'cd'
     alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
     alias ..='cd ../'                           # Go back 1 directory level
@@ -328,7 +303,7 @@ alias_gnu() {
     #           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
     #   --------------------------------------------------------------------
     mans () {
-	man $1 | grep -iC2 --color=always $2 | less
+        man $1 | grep -iC2 --color=always $2 | less
     }
 
     #   showa: to remind yourself of an alias (given some part of it)
@@ -414,7 +389,7 @@ alias_posix() {
     #           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
     #   --------------------------------------------------------------------
     mans () {
-	man $1 | grep -iC2 --color=always $2 | less
+        man $1 | grep -iC2 --color=always $2 | less
     }
 
     #   showa: to remind yourself of an alias (given some part of it)
@@ -472,4 +447,3 @@ alias_"$EXT"
 if [ -f ~/.local_bashrc ]; then
     source ~/.local_bashrc
 fi
-
