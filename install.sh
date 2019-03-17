@@ -204,18 +204,22 @@ install_config "$BASHRC_CONFIG_FILE"
 # .bash_profile
 install_config "$BASH_PROFILE_CONFIG_FILE"
 # .tmux.conf
+sudo pacman -Syu --noconfirm tmux
 install_config "$TMUX_CONFIG_FILE"
 # .vimrc
 # install_config "$VIM_CONFIG_FILE"
 # .emacs.d/init.el
+sudo pacman -Syu --noconfirm emacs
 install_config "$EMACS_CONFIG_FILE"
 # .config/i3/config
+sudo pacman -Syu --noconfirm i3-wm
 install_config "$I3_CONFIG_FILE"
 # .config/polybar/config
 # install_config "$POLYBAR_CONFIG_FILE"
 # .config/polybar/launch.sh
 # install_config "$POLYBAR_LAUNCH_FILE"
 # .config/ranger/rc.conf
+sudo pacman -Syu --noconfirm ranger
 install_config "$RANGER_CONFIG_FILE"
 
 if [ "$INSTALL_PEDA" -eq 1 ]; then
