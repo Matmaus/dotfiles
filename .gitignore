@@ -1,3 +1,7 @@
 .DS_Store
-/#.emacs#
-*~
+.idea
+*.log
+tmp/
+*.pdf
+get_text.py
+my_*

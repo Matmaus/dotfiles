@@ -10,6 +10,7 @@
 # Set the shell prompt
 # export PS1="\[\e[01;31m\]\u\[\e[0m\]\[\e[00;37m\]@\h:\[\e[0m\]\[\e[00;36m\][\W]\[\e[0m\]\[\e[00;37m\]\\$ \[\e[0m\]"
 export PS1="\[\e[32m\]\u\[\e[m\]@\h:\[\e[31m\][\[\e[m\]\W\[\e[31m\]]\[\e[m\]\\$ "
+source "/home/matus/dotfiles/prompt.sh"
 
 # Set Paths
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin:$PATH"
@@ -265,7 +266,7 @@ alias_gnu() {
     alias ls='ls -G --group-directories-first --color=auto' # Preferred directory listing
     alias less='less -FSRXc'                    # Preferred 'less' implementation
     alias free='free -m'                        # show sizes in MB
-    cd() { builtin cd "$@"; ls; }               # Always list directory contents upon 'cd'
+    cd() { builtin cd "$@"; ls -G --group-directories-first --color=auto; }               # Always list directory contents upon 'cd'
     alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
     alias ..='cd ../'                           # Go back 1 directory level
     alias ...='cd ../../'                       # Go back 2 directory levels
