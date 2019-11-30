@@ -2,6 +2,7 @@
 .idea
 *.log
 tmp/
+.envrc
 *.pdf
-get_text.py
 my_*
+.dir-locals.el
