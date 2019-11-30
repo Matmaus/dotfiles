@@ -23,6 +23,8 @@ URxvt*colorUL:                          yellow
 URxvt*underlineColor:                   yellow
 Rxvt*cursorColor:                      Magenta
 
+! Xft.dpi: 192
+
 *color0:  #2E3436
 *color1:  #a40000
 *color2:  #4E9A06
