@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 export PATH="/home/matus/Documents/sublime_text_3_build_3207_x64/sublime_text_3:$PATH"
+export PATH="/home/matus/.cargo/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/matus/.oh-my-zsh"
@@ -73,14 +74,21 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git man copybuffer thefuck zsh-autosuggestions zsh_reload)
+plugins=(git wd web-search man copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
 # (virtualenv)
 # (omz-git) Modify the console prompt play more nicely with our branch naming conventions
+# (z) Tracks your most used directories, based on 'frecency'.
+# (dircycle) => This plugin enables directory navigation similar to using back and forward on browsers or common file explorers like Finder or Nautilus.
+# <wd> (warp directory) lets you jump to custom directories
+# <web-search> => Adds aliases for searching with Google, Wiki, Bing, YouTube and other popular services.
 # <man> Esc + man => add man before the previous command to see the manual for this command
+# <colored-man-pages> => This plugin adds colors to man pages.
 # <copybuffer> Ctrl-o => copies the text that is currently typed in the command line ($BUFFER) to the system clipboard
-# <thefuck> Esc + Esc => correct previous console command
+# (copyfile) => Puts the contents of a file in your system clipboard so you can paste it anywhere.
+# (thefuck) Esc + Esc => correct previous console command
 # (jira) CLI support for JIRA interaction - https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/jira
 # (systemadmin) This plugin adds a series of aliases and functions which make a System Administrator's life easier - https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemadmin
+# <zsh-syntax-highlighting> It provides syntax highlighting for the shell zsh.
 # <zsh-autosuggestions> It suggests commands as you type based on history and completions
 # <zsh_reload> src => The zsh_reload plugin defines a function to reload the zsh session with just a few keystrokes
 
@@ -168,7 +176,7 @@ alias ll='ls -FGlAhp --group-directories-first --color=auto' # Preferred 'ls' im
 alias ls='ls -G --group-directories-first --color=auto' # Preferred directory listing
 alias less='less -FSRXc'                    # Preferred 'less' implementation
 alias free='free -m'                        # show sizes in MB
-cd() { builtin cd "$@"; ls */ -Gd --group-directories-first --color=auto; }               # Always list directory contents upon 'cd'
+# cd() { builtin cd "$@"; ls */ -Gd --group-directories-first --color=auto; }               # Always list directory contents upon 'cd'
 alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
 alias ..='cd ../'                           # Go back 1 directory level
 alias ...='cd ../../'                       # Go back 2 directory levels
@@ -255,6 +263,8 @@ my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
 if [ -f ~/.local_bashrc ]; then
     source ~/.local_bashrc
 fi
+
+eval "$(direnv hook zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
