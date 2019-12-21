@@ -204,7 +204,7 @@ alias make1='make -j$(nproc --ignore=1)'    # make1:        Compiler with all th
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
 trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
 ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
-alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
+alias hey='cht.sh'                          # hey           Search for a given query
 
 #   lr:  Full Recursive Directory Listing
 #   ------------------------------------------
