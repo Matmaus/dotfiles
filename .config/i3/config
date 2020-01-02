@@ -9,6 +9,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+# Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
 set $base00 #101218
 set $base01 #1f222d
@@ -26,21 +27,31 @@ set $base0C #97e0ff
 set $base0D #97bbf7
 set $base0E #c0b7f9
 set $base0F #37d925
+
+# Configure border style <normal|1pixel|pixel xx|none|pixel>
+new_window pixel 1
+new_float normal
+
+# Hide borders
+hide_edge_borders smart
+
+# change borders
+# bindsym $mod+u border none
+# bindsym $mod+y border pixel 1
+# bindsym $mod+n border normal
+
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-#font pango:monospace 8
-font pango:System San Francisco Display 10
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
-
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, its unicode glyph coverage is limited, the old
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+#font pango:DejaVu Sans Mono 8
+font pango:System San Francisco Display 10
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -60,6 +71,16 @@ bindsym $mod+d exec rofi -show run
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+################################################################################################
+## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
+################################################################################################
+
+# exec --no-startup-id pulseaudio
+# exec --no-startup-id pa-applet
+# bindsym $mod+Ctrl+m exec pavucontrol
+
+################################################################################################
 
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
@@ -109,11 +130,21 @@ bindsym $mod+Shift+space floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
+# toggle sticky
+bindsym $mod+Shift+s sticky toggle
+
 # focus the parent container
 bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
+
+# move the currently focused window to the scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
 
 bindsym $mod+m move workspace to output left
 
@@ -132,17 +163,21 @@ exec --no-startup-id pa-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id emacs --daemon
 exec --no-startup-id redshift -l 50.08804:14.42076
-exec_always --no-startup-id feh --bg-scale --no-fehbg ~/.wallpaper.png # set wallpaper
+exec --no-startup-id picom --config ~/compton.conf
+# exec_always --no-startup-id feh --bg-scale --no-fehbg ~/.wallpaper.png # set wallpaper
+exec_always --no-startup-id nitrogen --restore; sleep 1; picom -b
 exec_always --no-startup-id autorandr --change # set mointor layout
 
+# TODO replace absolute paths like /home/matus
+
 set $workspace1 "1: Browser "
-set $workspace2 "2: Editor "
+set $workspace2 "2: Editor "
 set $workspace3 "3: Terminal "
 set $workspace4 "4: 4"
 set $workspace5 "5: 5"
 set $workspace6 "6: 6"
 set $workspace7 "7: 7"
-set $workspace8 "8: 8"
+set $workspace8 "8: Spotify "
 set $workspace9 "9: Todo "
 set $workspace10 "10: Slack "
 
@@ -170,10 +205,24 @@ bindsym $mod+Shift+8 move container to workspace $workspace8
 bindsym $mod+Shift+9 move container to workspace $workspace9
 bindsym $mod+Shift+0 move container to workspace $workspace10
 
+# Open specific applications in floating mode
+for_window [title="alsamixer"] floating enable border pixel 1
+for_window [class="Galculator"] floating enable border pixel 1
+for_window [class="GParted"] floating enable border normal
+for_window [title="i3_help"] floating enable sticky enable border normal
+for_window [class="Lxappearance"] floating enable sticky enable border normal
+for_window [class="Manjaro-hello"] floating enable
+for_window [class="Manjaro Settings Manager"] floating enable border normal
+for_window [class="octopi"] floating enable
+for_window [class="Pamac-manager"] floating enable
+for_window [class="Pavucontrol"] floating enable
+for_window [class="(?i)virtualbox"] floating enable border normal
+
 assign [class="(?i)Chromium"] $workspace1
 assign [class="(?i)Firefox"] $workspace1
 assign [class="(?i)Emacs"] $workspace2
 assign [class="(?i)jetbrains-idea-ce"] $workspace2
+assign [class="(?i)spotify"] $workspace8
 assign [class="(?i)Slack"] $workspace10
 
 workspace $workspace1 output DP2-2 eDP1
@@ -189,8 +238,10 @@ workspace $workspace9 output eDP1
 
 # focus urgent window
 bindsym $mod+x [urgent=latest] focus
+# switch to workspace with urgent window automatically
+# for_window [urgent=latest] focus
 
-for_window [workspace=$workspace1] layout stacked
+for_window [workspace=$workspace1] layout stacking
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -202,6 +253,7 @@ bindsym $mod+Shift+x exec i3lock -i ~/.wallpaper.png --tiling --ignore-empty-pas
 bindsym $mod+Mod1+l exec systemctl suspend
 
 # resize window (you can also use the mouse for that)
+bindsym $mod+r mode "resize"
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
 
@@ -225,7 +277,9 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
-bindsym $mod+r mode "resize"
+
+# Lock screen
+# bindsym $mod+x exec betterlockscreen -l blur
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -261,13 +315,13 @@ bindsym $mod+r mode "resize"
 
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +2% && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # pkill -RTMIN+10 i3blocks #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -2% && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # pkill -RTMIN+10 i3blocks #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # && pkill -RTMIN+10 i3blocks # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +2% # && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # pkill -RTMIN+10 i3blocks #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -2% # && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # pkill -RTMIN+10 i3blocks #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # && pkill -RTMIN+10 i3blocks # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5 && dunstify -r 991048 -u low 'Brightness:' $(xbacklight -get | awk '{print int($1)}') # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5 && dunstify -r 991048 -u low 'Brightness:' $(xbacklight -get | awk '{print int($1)}') # decrease screen brightness
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # && dunstify -r 991048 -u low 'Brightness:' $(xbacklight -get | awk '{print int($1)}') # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # && dunstify -r 991048 -u low 'Brightness:' $(xbacklight -get | awk '{print int($1)}') # decrease screen brightness
 
 # Touchpad controls
 bindsym XF86TouchpadToggle exec /home/matus/.config/i3/toggletouchpad.sh # toggle touchpad
@@ -292,4 +346,57 @@ for_window [class="^"] split toggle
 exec_always gsettings set org.gnome.desktop.background show-desktop-icons false
 exec_always gsettings set org.nemo.desktop show-desktop-icons false
 
-exec_always compton -f
+#############################
+### settings for i3-gaps: ###
+#############################
+
+# Set inner/outer gaps
+gaps inner 10
+gaps outer 0
+
+# Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
+# gaps inner|outer current|all set|plus|minus <px>
+# gaps inner all set 10
+# gaps outer all plus 5
+
+# Smart gaps (gaps used if only more than one container on the workspace)
+
+# Smart borders (draw borders around container only if it is not the only container on this workspace)
+# on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
+
+# Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
