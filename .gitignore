@@ -2,6 +2,7 @@
 .idea
 *.log
 tmp/
+venv/
 .envrc
 *.pdf
 my_*

@@ -163,10 +163,11 @@ exec --no-startup-id pa-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id emacs --daemon
 exec --no-startup-id redshift -l 50.08804:14.42076
-exec --no-startup-id picom --config ~/compton.conf
-# exec_always --no-startup-id feh --bg-scale --no-fehbg ~/.wallpaper.png # set wallpaper
-exec_always --no-startup-id nitrogen --restore; sleep 1; picom -b
+exec --no-startup-id compton --config ~/compton.conf
+exec_always --no-startup-id feh --bg-scale --no-fehbg ~/.wallpapers/544663.jpg # set wallpaper
 exec_always --no-startup-id autorandr --change # set mointor layout
+exec --no-startup-id xset s off
+exec --no-startup-id xset -dpms
 
 # TODO replace absolute paths like /home/matus
 
@@ -213,7 +214,7 @@ for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lxappearance"] floating enable sticky enable border normal
 for_window [class="Manjaro-hello"] floating enable
 for_window [class="Manjaro Settings Manager"] floating enable border normal
-for_window [class="octopi"] floating enable
+for_window [class="octopi"] floating enable.jpg
 for_window [class="Pamac-manager"] floating enable
 for_window [class="Pavucontrol"] floating enable
 for_window [class="(?i)virtualbox"] floating enable border normal
@@ -222,7 +223,7 @@ assign [class="(?i)Chromium"] $workspace1
 assign [class="(?i)Firefox"] $workspace1
 assign [class="(?i)Emacs"] $workspace2
 assign [class="(?i)jetbrains-idea-ce"] $workspace2
-assign [class="(?i)spotify"] $workspace8
+assign [class="(?i)Spotify"] $workspace8
 assign [class="(?i)Slack"] $workspace10
 
 workspace $workspace1 output DP2-2 eDP1
@@ -249,7 +250,8 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Shift+x exec i3lock -i ~/.wallpaper.png --tiling --ignore-empty-password #--color=40E0D0
+bindsym $mod+o exec alacritty -e bash ~/.local/bin/ranger-open.sh
+bindsym $mod+Shift+x exec i3lock -i ~/.wallpapers/lock.png --tiling --ignore-empty-password #--color=40E0D0
 bindsym $mod+Mod1+l exec systemctl suspend
 
 # resize window (you can also use the mouse for that)

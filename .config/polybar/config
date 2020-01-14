@@ -13,6 +13,7 @@ alert = #B2535B
 ;------------;
 
 [bar/PolybarTop]
+monitor = ${env:MONITOR:eDP1}
 line-size = 3
 line-color = #f00
 
@@ -43,7 +44,8 @@ bottom = false
 ; FONTS ;
 ;-------;
 
-font-0 = scientifica:style=Regular:size=11:antialias=true;3"
+font-0 = System San Francisco Display:size=11:antialiasing=true;3
+; font-0 = scientifica:style=Regular:size=11:antialias=true;3"
 font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=8;3"
 font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=8;3"
 font-3 = "Font Awesome 5 Brands:pixelsize=8;3"
@@ -74,10 +76,11 @@ module-margin-right = 2
 
 modules-left = powermenu pulseaudio backlight-acpi
 modules-center = xwindow
-modules-right = eth wlan battery date
+modules-right = wlan xkeyboard battery date updates
 
 tray-position = right
 tray-padding =2
+tray-detached = false
 ;tray-transparent = true
 ;tray-background = #0063ff
 
@@ -101,6 +104,7 @@ cursor-scroll = ns-resize
 
 [bar/PolybarBot]
 line-size = 3
+monitor = ${env:MONITOR:eDP1}
 line-color = #f00
 
 border-size = 4
@@ -130,7 +134,8 @@ bottom = true
 ; FONTS ;
 ;-------;
 
-font-0 = scientifica:style=Regular:size=11:antialias=true;3
+font-0 = System San Francisco Display:size=11:antialiasing=true;3
+; font-0 = scientifica:style=Regular:size=11:antialias=true;3
 font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=11;3"
 font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=11;3"
 font-3 = "Font Awesome 5 Brands:pixelsize=11;3"
@@ -187,17 +192,17 @@ label-maxlen = 80
 type = internal/xkeyboard
 blacklist-0 = num lock
 
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-underline = ${colors.secondary}
+; format-prefix-underline = ${colors.secondary}
 
 label-layout = %layout%
-label-layout-underline = ${colors.secondary}
+; label-layout-underline = ${colors.secondary}
 
 label-indicator-padding = 2
 label-indicator-margin = 1
 label-indicator-background = ${colors.secondary}
-label-indicator-underline = ${colors.secondary}
+; label-indicator-underline = ${colors.secondary}
 
 [module/filesystem]
 type = internal/fs
@@ -392,7 +397,7 @@ format-volume-foreground = ${colors.primary}
 label-volume = %percentage%%
 label-volume-foreground = ${colors.primary}
 
-label-muted =   mudo
+label-muted =   off
 label-muted-foreground = ${colors.secondary}
 
 bar-volume-width = 10
@@ -534,6 +539,62 @@ menu-2-0 = power off
 menu-2-0-exec = sudo poweroff
 menu-2-1 = cancel
 menu-2-1-exec = menu-open-0
+
+[module/updates]
+type = custom/script
+
+; Available tokens:
+;   %counter%
+; Command to be executed (using "/usr/bin/env sh -c [command]")
+exec = ~/.config/polybar/updates.sh
+
+; Conditional command that, if defined, needs to exit successfully
+; before the main exec command is invoked.
+; Default: ""
+;;exec-if = ""
+
+; Will the script output continous content?
+; Default: false
+tail = true
+
+; Seconds to sleep between updates
+; Default: 2 (0 if `tail = true`)
+interval = 5
+
+; Available tags:
+;   <output> - deprecated
+;   <label> (default)
+; format = <label>
+; format-background = ${color.mb}
+; format-prefix = " "
+; format-prefix-foreground = ${colors.primary}
+format-foreground = ${colors.primary}
+; format-padding = ${layout.module-padding}
+
+; Available tokens:
+;   %output%
+; Default: %output%
+; label = %output:0:15:...%
+
+; Available tokens:
+;   %counter%
+;   %pid%
+;
+; "click-(left|middle|right)" will be executed using "/usr/bin/env sh -c [command]"
+click-left = $HOME/.config/polybar/lupdates &
+;;click-middle = ~/.config/polybar/scripts/lupdates &
+;;click-right = ~/.config/polybar/scripts/lupdates &
+;;double-click-left = echo double left %counter%
+;;double-click-middle = echo double middle %counter%
+;;double-click-right = echo double right %counter%
+
+; Available tokens:
+;   %counter%
+;   %pid%
+;
+; "scroll-(up|down)" will be executed using "/usr/bin/env sh -c [command]"
+;;scroll-up = echo scroll up %counter%
+;;scroll-down = echo scroll down %counter%
 
 [settings]
 screenchange-reload = true
