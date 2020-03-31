@@ -152,7 +152,6 @@ bindsym $mod+m move workspace to output left
 bindsym $mod+Tab workspace back_and_forth
 
 # Startup Programs
-exec --no-startup-id /home/matus/.config/polybar/launch.sh
 ##exec --no-startup-id dunst
 #exec --no-startup-id dropbox
 exec --no-startup-id pactl set-sink-mute 0 1 # mute volume
@@ -164,10 +163,11 @@ exec --no-startup-id blueman-applet
 exec --no-startup-id emacs --daemon
 exec --no-startup-id redshift -l 50.08804:14.42076
 exec --no-startup-id compton --config ~/compton.conf
-exec_always --no-startup-id feh --bg-scale --no-fehbg ~/.wallpapers/544663.jpg # set wallpaper
 exec_always --no-startup-id autorandr --change # set mointor layout
 exec --no-startup-id xset s off
 exec --no-startup-id xset -dpms
+exec_always --no-startup-id /home/matus/.config/polybar/launch.sh
+exec_always --no-startup-id feh --bg-scale --no-fehbg ~/.wallpapers/544663.jpg # set wallpaper
 
 # TODO replace absolute paths like /home/matus
 
@@ -217,7 +217,6 @@ for_window [class="Manjaro Settings Manager"] floating enable border normal
 for_window [class="octopi"] floating enable.jpg
 for_window [class="Pamac-manager"] floating enable
 for_window [class="Pavucontrol"] floating enable
-for_window [class="(?i)virtualbox"] floating enable border normal
 
 assign [class="(?i)Chromium"] $workspace1
 assign [class="(?i)Firefox"] $workspace1
@@ -251,7 +250,7 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+o exec alacritty -e bash ~/.local/bin/ranger-open.sh
-bindsym $mod+Shift+x exec i3lock -i ~/.wallpapers/lock.png --tiling --ignore-empty-password #--color=40E0D0
+bindsym $mod+Shift+x exec /home/matus/.config/i3/lock.sh
 bindsym $mod+Mod1+l exec systemctl suspend
 
 # resize window (you can also use the mouse for that)
@@ -335,8 +334,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # toggle split direction for each window
-default_orientation vertical
-for_window [class="^"] split toggle
+# default_orientation vertical
+# for_window [class="^"] split toggle
 
 # Set wallpaper (need to install feh)
 #exec_always feh --bg-scale /path_to_image_file

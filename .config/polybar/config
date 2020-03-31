@@ -25,7 +25,7 @@ border-color = #00000000
 ;------------;
 
 width = 100%
-height = 30
+height = 25
 offset-y = 0
 offset-x = 0
 
@@ -115,7 +115,7 @@ border-color = #00000000
 ;------------;
 
 width = 100%
-height = 30
+height = 25
 offset-y = 0
 offset-x = 0
 
@@ -167,7 +167,7 @@ module-margin-right = 2
 
 modules-left = i3
 modules-center = spotify
-modules-right = filesystem memory cpu temperature
+modules-right = filesystem memory cpu
 
 ;---------;
 ; MODULES ;
@@ -376,8 +376,8 @@ format-disconnected =
 type = internal/date
 interval = 5
 
-date =
-date-alt = " %m.%d.%Y"
+date = " %d.%m"
+date-alt = " %d.%m.%Y"
 
 time = %H:%M
 time-alt = %H:%M:%S

@@ -5,6 +5,9 @@ export PATH="/home/matus/.cargo/bin:$PATH"
 # Path to your oh-my-zsh installation.
 export ZSH="/home/matus/.oh-my-zsh"
 
+# Set numper of cores for makepkg
+MAKEFLAGS="-j$(nproc)"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -74,11 +77,12 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git wd web-search man copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
+plugins=(git wd web-search man docker copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
 # (virtualenv)
 # (omz-git) Modify the console prompt play more nicely with our branch naming conventions
-# (z) Tracks your most used directories, based on 'frecency'.
+# (z) Tracks your most used directories, based on 'frequency'.
 # (dircycle) => This plugin enables directory navigation similar to using back and forward on browsers or common file explorers like Finder or Nautilus.
+# <docker> => This plugin adds auto-completion for docker.
 # <wd> (warp directory) lets you jump to custom directories
 # <web-search> => Adds aliases for searching with Google, Wiki, Bing, YouTube and other popular services.
 # <man> Esc + man => add man before the previous command to see the manual for this command
@@ -168,6 +172,9 @@ ff () { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the curr
 ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
 ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
 
+alias rat='\cat'                            # Default 'cat' implementation
+alias cat='\bat -n'                         # Preferred 'cat' implementation
+alias bat='\bat -nA'                        # Preferred 'cat' implementation for binaries
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
@@ -202,8 +209,6 @@ alias makei="make install -j$(nproc); alert" # makei:        Compile install tar
 alias makec='make clean'                    # makec:        Run clean make target
 alias make1='make -j$(nproc --ignore=1)'    # make1:        Compiler with all threads except one, let system keep some resources
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
-trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
-ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
 alias hey='cht.sh'                          # hey           Search for a given query
 
 #   lr:  Full Recursive Directory Listing
@@ -263,6 +268,36 @@ my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
 if [ -f ~/.local_bashrc ]; then
     source ~/.local_bashrc
 fi
+
+################ zoxide begin ####################
+_zoxide_precmd() {
+    zoxide add
+}
+
+[[ -n "${precmd_functions[(r)_zoxide_precmd]}" ]] || {
+    precmd_functions+=(_zoxide_precmd)
+}
+
+z() {
+    if [ $# -ne 0 ]; then
+        _Z_RESULT=$(zoxide query "$@")
+        case $_Z_RESULT in
+            "query: "*)
+                cd "${_Z_RESULT:7}"
+                ;;
+            *)
+                echo "${_Z_RESULT}"
+                ;;
+        esac
+    fi
+}
+
+alias zi="z -i"
+
+alias za="zoxide add"
+alias zq="zoxide query"
+alias zr="zoxide remove"
+################ zoxide end ####################
 
 eval "$(direnv hook zsh)"
 

@@ -75,8 +75,6 @@
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        eval              ; run code, run (also, repls)
-       flycheck          ; tasing you for every semicolon you forget
-       ;;flyspell          ; tasing you for misspelling mispelling
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
@@ -92,6 +90,10 @@
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
        ;;wakatime
+
+       :checkers
+       syntax              ; tasing you for every semicolon you forget
+       spell               ; tasing you for misspelling mispelling
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -110,7 +112,7 @@
        ;;ess               ; emacs speaks statistics
        ;;fsharp           ; ML stands for Microsoft's Language
        ;;go                ; the hipster dialect
-       ;;(haskell +intero) ; a language that's lazier than I am
+       (haskell +intero) ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
@@ -136,7 +138,8 @@
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       python            ; beautiful is better than ugly
+       (python            ; beautiful is better than ugly
+        +lsp)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;rest              ; Emacs as a REST client
@@ -181,15 +184,6 @@
        ;; config. Use it as a reference for your own modules.
        (default +bindings +smartparens))
 
-      ;; Don't use Ctr+i for tab bind
-      ;; This fixes <tab>ing in terminal
-      (setq evil-want-C-i-jump nil)
-      ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
-      ;; may have their own settings.
-      (load-theme 'doom-Iosvkem t)
-
-      ;; Corrects (and improves) org-mode's native fontification.
-      (doom-themes-org-config)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

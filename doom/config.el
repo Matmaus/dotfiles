@@ -15,3 +15,13 @@
                100)
           '(85 . 50) '(100 . 100)))))
  (global-set-key (kbd "C-c t") 'toggle-transparency)
+
+;; Don't use Ctr+i for tab bind
+;; This fixes <tab>ing in terminal
+(setq evil-want-C-i-jump nil)
+;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+;; may have their own settings.
+(load-theme 'doom-Iosvkem t)
+
+;; Corrects (and improves) org-mode's native fontification.
+(doom-themes-org-config)
