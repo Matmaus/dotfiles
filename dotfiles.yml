@@ -1,0 +1,42 @@
+- name: Set up local workstation
+  hosts: local
+  roles:
+    - role: zsh
+      tags:
+        - zsh
+    - role: git
+      tags:
+        - git
+    - role: docker
+      tags:
+        - docker
+    - role: fzf
+      tags:
+        - fzf
+    - role: fd
+      tags:
+        - fd
+    - role: bat
+      tags:
+        - bat
+    - role: tmux
+      tags:
+        - tmux
+    - role: ripgrep
+      tags:
+        - ripgrep
+    - role: exa
+      tags:
+        - exa
+    - role: emacs_doom
+      tags:
+        - emacs_doom
+    - role: alacritty
+      tags:
+        - alacritty
+    - role: ranger
+      tags:
+        - ranger
+    - role: sway
+      tags:
+        - sway

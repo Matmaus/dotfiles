@@ -1,0 +1,24 @@
+---
+###############################################################################
+# Tmux installation
+
+- name: Tmux | Installs tmux | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: tmux
+
+- name: Tmux | Links .tmux.conf file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/tmux/files/tmux/tmux.conf.link"
+    dest: "{{ lookup('env', 'HOME') }}/.tmux.conf"
+    state: link
+    force: yes
+
+- name: Tmux | Links .tmux.conf.local file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/tmux/files/tmux/tmux.conf.local.link"
+    dest: "{{ lookup('env', 'HOME') }}/.tmux.conf.local"
+    state: link
+    force: yes
+

@@ -1,0 +1,12 @@
+---
+###############################################################################
+# Aliases
+
+- name: update | Update aliases | command
+  blockinfile:
+    path: "{{ lookup('env', 'HOME') }}/.aliases.zsh"
+    block: "{{ lookup('file', 'aliases.zsh') }}" 
+    insertafter: "# Generated"
+    marker_begin: " `{{ role_name }}`   <(BEGIN"
+    marker_end: " `{{ role_name }}`   <(END"
+    marker: "# {mark} ANSIBLE BLOCK)>"

@@ -1,0 +1,18 @@
+---
+###############################################################################
+# EXA installation
+
+- name: EXA | Installs BAT | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: exa
+
+- name: Insert new aliases
+  include_tasks: roles/_manage_aliases/tasks/main.yml
+
+- name: Remove old aliases
+  lineinfile:
+    path: "{{ lookup('env', 'HOME') }}/.zshrc"
+    regexp: "^alias l(\\w)='ls(.*)$"
+    state: absent

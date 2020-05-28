@@ -1,0 +1,14 @@
+---
+###############################################################################
+# Create .config diretory
+
+- name: Check if .config exists
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.config"
+  register: stat_result
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config"
+    state: directory
+  when: not stat_result.stat.exists

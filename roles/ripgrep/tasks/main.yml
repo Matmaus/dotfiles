@@ -1,0 +1,9 @@
+---
+###############################################################################
+# RIPGREP installation
+
+- name: RIPGREP | Installs RIPGREP | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: ripgrep

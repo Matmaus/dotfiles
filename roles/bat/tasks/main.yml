@@ -1,0 +1,12 @@
+---
+###############################################################################
+# BAT installation
+
+- name: BAT | Installs BAT | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: bat
+
+- name: Insert aliases
+  include_tasks: roles/_manage_aliases/tasks/main.yml

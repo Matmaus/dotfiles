@@ -1,0 +1,27 @@
+---
+###############################################################################
+# Alacritty installation
+
+- name: Alacritty | Installs Alacritty | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: alacritty
+
+- name: Check if .config/alacritty exists
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.config/alacritty"
+  register: stat_result
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config/alacritty"
+    state: directory
+  when: not stat_result.stat.exists
+
+- name: Alacritty | Links . file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/alacritty/files/alacritty.yml"
+    dest: "{{ lookup('env', 'HOME') }}/.config/alacritty/alacritty.yml"
+    state: link
+    force: yes

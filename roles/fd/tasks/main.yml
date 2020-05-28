@@ -1,0 +1,9 @@
+---
+###############################################################################
+# FD installation
+
+- name: FD | Installs FD | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: fd

@@ -1,0 +1,67 @@
+- name: Installs zsh | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: zsh
+    state: present
+
+- name: Installs curl | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: curl
+    state: present
+
+- name: Sets zsh as default shell for my user | command
+  become: yes
+  become_user: root
+  command: chsh -s /bin/zsh {{ lookup('env', 'USER') }}
+  register: zsh_for_user
+  failed_when: zsh_for_user.rc >= 1
+  changed_when: zsh_for_user.rc == 0
+
+- name: Checks for oh-my-zsh installation | stat
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
+  register: oh_my_zsh_stat
+
+- name: Installs oh-my-zsh | raw
+  raw: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+  when: not oh_my_zsh_stat.stat.exists
+
+- name: Install Powerlevel10k theme | raw
+  raw: 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k'
+  when: not oh_my_zsh_stat.stat.exists
+
+- name: Copy .zshrc file | file
+  copy:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/zsh/files/zshrc"
+    dest: "{{ lookup('env', 'HOME') }}/.zshrc"
+    force: yes
+
+- name: Copy .aliases.zsh file | file
+  copy:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/zsh/files/aliases.zsh"
+    dest: "{{ lookup('env', 'HOME') }}/.aliases.zsh"
+    force: yes
+
+- name: Link .functions.zsh file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/zsh/files/functions.zsh"
+    dest: "{{ lookup('env', 'HOME') }}/.functions.zsh"
+    state: link
+    force: yes
+
+- name: Link .p10k.zsh file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/zsh/files/p10k.zsh"
+    dest: "{{ lookup('env', 'HOME') }}/.p10k.zsh"
+    state: link
+    force: yes
+
+- name: Link .zprofile file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/zsh/files/zprofile"
+    dest: "{{ lookup('env', 'HOME') }}/.zprofile"
+    state: link
+    force: yes

@@ -1,0 +1,27 @@
+---
+###############################################################################
+# Ranger installation
+
+- name: Ranger | Installs Ranger | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: ranger
+
+- name: Check if .config/ranger exists
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.config/ranger"
+  register: stat_result
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config/ranger"
+    state: directory
+  when: not stat_result.stat.exists
+
+- name: Ranger | Links . file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/ranger/files/rc.conf.link"
+    dest: "{{ lookup('env', 'HOME') }}/.config/ranger/rc.conf"
+    state: link
+    force: yes

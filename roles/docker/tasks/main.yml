@@ -1,0 +1,15 @@
+---
+###############################################################################
+# Docker installation
+
+- name: Docker | Installs docker | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: docker
+
+- name: Docker | Installs docker-compose | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: docker-compose

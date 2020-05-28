@@ -1,0 +1,10 @@
+---
+###############################################################################
+# Update Arch Linux
+
+- name: update | pacman -Syu | pacman
+  become: yes
+  become_user: root
+  pacman:
+    update_cache: yes
+    upgrade: yes

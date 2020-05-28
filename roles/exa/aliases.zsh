@@ -1,0 +1,6 @@
+alias ls='exa --icons --group-directories-first'
+alias ll='exa --long --icons --color-scale --all --group-directories-first --git'
+alias lld='exa --long --all --only-dirs'
+alias llr='exa --long --icons --color-scale --all --group-directories-first --git --recurse --level=2'
+alias lls='exa --long --icons --color-scale --all --group-directories-first --git --sort=size'
+alias llt='exa --long --icons --color-scale --all --group-directories-first --git --sort=type'

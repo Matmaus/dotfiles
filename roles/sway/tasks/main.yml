@@ -1,0 +1,29 @@
+---
+###############################################################################
+# Sway installation
+
+- name: Sway | Installs Sway | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: sway
+
+- name: Sway | Links sway directory | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/sway/files/sway.link"
+    dest: "{{ lookup('env', 'HOME') }}/.config/sway"
+    state: link
+    force: yes
+
+- name: Waybar | Installs Waybar | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: waybar
+
+- name: Waybar | Links waybar directory | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/sway/files/waybar.link"
+    dest: "{{ lookup('env', 'HOME') }}/.config/waybar"
+    state: link
+    force: yes

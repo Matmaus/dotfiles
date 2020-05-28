@@ -1,0 +1,9 @@
+---
+###############################################################################
+# FZF installation
+
+- name: FZF | Installs FZF | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: fzf

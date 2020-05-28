@@ -1,0 +1,23 @@
+---
+###############################################################################
+# Git installation
+
+- name: Git | Installs git | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: git
+
+- name: Git | Links global gitignore file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/git/files/gitignore_global.link"
+    dest: "{{ lookup('env', 'HOME') }}/.gitignore"
+    state: link
+    force: yes
+
+- name: Git | Links global gitconfig file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/git/files/gitconfig_global.link"
+    dest: "{{ lookup('env', 'HOME') }}/.gitconfig"
+    state: link
+    force: yes

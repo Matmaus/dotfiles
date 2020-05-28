@@ -1,0 +1,42 @@
+---
+###############################################################################
+# Emacs Doom installation
+
+- name: Emacs | Installs Emacs | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: emacs
+    state: present
+
+- name: Checks for emacd-doom installation | stat
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.doom.d"
+  register: doom_stat
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.doom.d"
+    state: directory
+  when: not doom_stat.stat.exists
+
+- name: Doom | Installs Emacs Doom | raw
+  raw: rm -rf ~/.emacs.d && git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d && ~/.emacs.d/bin/doom install
+  when: not doom_stat.stat.exists
+
+- name: Doom | Links init.el file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/emacs_doom/files/doom.d/init.el.link"
+    dest: "{{ lookup('env', 'HOME') }}/.doom.d/init.el"
+    state: link
+    force: yes
+
+- name: Doom | Links config.el file | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/emacs_doom/files/doom.d/config.el.link"
+    dest: "{{ lookup('env', 'HOME') }}/.doom.d/config.el"
+    state: link
+    force: yes
+
+- name: Insert aliases
+  include_tasks: roles/_manage_aliases/tasks/main.yml
