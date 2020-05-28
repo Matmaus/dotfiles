@@ -58,19 +58,17 @@ floating_modifier $mod
 
 # start a terminal
 # bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec WINIT_X11_SCALE_FACTOR=1 alacritty
+# bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec alacritty -e tmux new
+bindsym $mod+Shift+Return exec alacritty -e tmux a
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
-#bindsym $mod+d exec dmenu_run
+# start rofi (a program launcher)
 bindsym $mod+d exec rofi -show run
-#bindsym $mod+c exec --no-startup-id rofi -show calc -modi "calc:qalc +u8 -nocurrencies"
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+# Rofi as calculator
+# bindsym $mod+c exec --no-startup-id rofi -show calc -modi "calc:qalc +u8 -nocurrencies"
 
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
@@ -82,9 +80,10 @@ bindsym $mod+d exec rofi -show run
 
 ################################################################################################
 
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
+# Screenshots
+bindsym Print exec --no-startup-id grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') "$(xdg-user-dir PICTURES)/screenshot_$(date -Iminutes).png"
+bindsym $mod+Print exec --no-startup-id grim -g "$(slurp)" "$(xdg-user-dir PICTURES)/screenshot_$(date -Iminutes).png"
+bindsym $mod+Shift+Print exec --no-startup-id grim -g "$(slurp)" - | wl-copy
 
 # change focusn
 bindsym $mod+h focus left
@@ -152,77 +151,71 @@ bindsym $mod+m move workspace to output left
 bindsym $mod+Tab workspace back_and_forth
 
 # Startup Programs
-##exec --no-startup-id dunst
-#exec --no-startup-id dropbox
 exec --no-startup-id pactl set-sink-mute 0 1 # mute volume
 exec --no-startup-id pactl set-sink-volume 0 10% # set default volume
-exec setxkbmap -layout us,sk -variant ,qwerty -option grp:lctrl_lshift_toggle # set keyboard leyout
-exec --no-startup-id nm-applet
-exec --no-startup-id pa-applet
+exec --no-startup-id nm-applet --indicator
 exec --no-startup-id blueman-applet
 exec --no-startup-id emacs --daemon
 exec --no-startup-id redshift -l 50.08804:14.42076
-exec --no-startup-id compton --config ~/compton.conf
-exec_always --no-startup-id autorandr --change # set mointor layout
 exec --no-startup-id xset s off
 exec --no-startup-id xset -dpms
-exec_always --no-startup-id /home/matus/.config/polybar/launch.sh
-exec_always --no-startup-id feh --bg-scale --no-fehbg ~/.wallpapers/544663.jpg # set wallpaper
-exec --no-startup-id ~/.config/autostart/blow.sh
+exec_always --no-startup-id autorandr --change # set mointor layout
+exec_always --no-startup-id /home/matus/.config/waybar/launch.sh
 
 # TODO replace absolute paths like /home/matus
 
-set $workspace1 "1: Browser "
-set $workspace2 "2: Editor "
-set $workspace3 "3: Terminal "
-set $workspace4 "4: 4"
-set $workspace5 "5: 5"
-set $workspace6 "6: 6"
-set $workspace7 "7: 7"
-set $workspace8 "8: Spotify "
-set $workspace9 "9: Todo "
-set $workspace10 "10: Slack "
+set $workspace1 1
+set $workspace2 2
+set $workspace3 3
+set $workspace4 4
+set $workspace5 5
+set $workspace6 6
+set $workspace7 7
+set $workspace8 8
+set $workspace9 9
+set $workspace10 10
 
 # switch to workspace
-bindsym $mod+1 workspace $workspace1
-bindsym $mod+2 workspace $workspace2
-bindsym $mod+3 workspace $workspace3
-bindsym $mod+4 workspace $workspace4
-bindsym $mod+5 workspace $workspace5
-bindsym $mod+6 workspace $workspace6
-bindsym $mod+7 workspace $workspace7
-bindsym $mod+8 workspace $workspace8
-bindsym $mod+9 workspace $workspace9
-bindsym $mod+0 workspace $workspace10
+bindsym --to-code $mod+1 workspace $workspace1
+bindsym --to-code $mod+2 workspace $workspace2
+bindsym --to-code $mod+3 workspace $workspace3
+bindsym --to-code $mod+4 workspace $workspace4
+bindsym --to-code $mod+5 workspace $workspace5
+bindsym --to-code $mod+6 workspace $workspace6
+bindsym --to-code $mod+7 workspace $workspace7
+bindsym --to-code $mod+8 workspace $workspace8
+bindsym --to-code $mod+9 workspace $workspace9
+bindsym --to-code $mod+0 workspace $workspace10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $workspace1
-bindsym $mod+Shift+2 move container to workspace $workspace2
-bindsym $mod+Shift+3 move container to workspace $workspace3
-bindsym $mod+Shift+4 move container to workspace $workspace4
-bindsym $mod+Shift+5 move container to workspace $workspace5
-bindsym $mod+Shift+6 move container to workspace $workspace6
-bindsym $mod+Shift+7 move container to workspace $workspace7
-bindsym $mod+Shift+8 move container to workspace $workspace8
-bindsym $mod+Shift+9 move container to workspace $workspace9
-bindsym $mod+Shift+0 move container to workspace $workspace10
+bindsym --to-code $mod+Shift+1 move container to workspace $workspace1
+bindsym --to-code $mod+Shift+2 move container to workspace $workspace2
+bindsym --to-code $mod+Shift+3 move container to workspace $workspace3
+bindsym --to-code $mod+Shift+4 move container to workspace $workspace4
+bindsym --to-code $mod+Shift+5 move container to workspace $workspace5
+bindsym --to-code $mod+Shift+6 move container to workspace $workspace6
+bindsym --to-code $mod+Shift+7 move container to workspace $workspace7
+bindsym --to-code $mod+Shift+8 move container to workspace $workspace8
+bindsym --to-code $mod+Shift+9 move container to workspace $workspace9
+bindsym --to-code $mod+Shift+0 move container to workspace $workspace10
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
 for_window [class="Galculator"] floating enable border pixel 1
 for_window [class="GParted"] floating enable border normal
-for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lxappearance"] floating enable sticky enable border normal
 for_window [class="Manjaro-hello"] floating enable
 for_window [class="Manjaro Settings Manager"] floating enable border normal
 for_window [class="octopi"] floating enable.jpg
 for_window [class="Pamac-manager"] floating enable
 for_window [class="Pavucontrol"] floating enable
+for_window [app_id="nm-openconnect-auth-dialog"] floating enable
+for_window [app_id="blueman-manager"] floating enable
+for_window [title="Firefox - Sharing Indicator"] floating enable
 
 assign [class="(?i)Chromium"] $workspace1
 assign [class="(?i)Firefox"] $workspace1
 assign [class="(?i)Emacs"] $workspace2
-assign [class="(?i)jetbrains-idea-ce"] $workspace2
 assign [class="(?i)Spotify"] $workspace8
 assign [class="(?i)Slack"] $workspace10
 
@@ -251,7 +244,7 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+o exec alacritty -e bash ~/.local/bin/ranger-open.sh
-bindsym $mod+Shift+x exec /home/matus/.config/i3/lock.sh
+bindsym $mod+Shift+x exec /home/matus/.config/sway/lock.sh
 bindsym $mod+Mod1+l exec systemctl suspend
 
 # resize window (you can also use the mouse for that)
@@ -317,20 +310,19 @@ mode "resize" {
 
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +2% # && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # pkill -RTMIN+10 i3blocks #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -2% # && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # pkill -RTMIN+10 i3blocks #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # && dunstify -r 991049 -u low 'Volume:' $(~/.scripts/volume/volume) # && pkill -RTMIN+10 i3blocks # mute sound
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
+bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # && dunstify -r 991048 -u low 'Brightness:' $(xbacklight -get | awk '{print int($1)}') # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # && dunstify -r 991048 -u low 'Brightness:' $(xbacklight -get | awk '{print int($1)}') # decrease screen brightness
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
 
 # Touchpad controls
 bindsym XF86TouchpadToggle exec /home/matus/.config/i3/toggletouchpad.sh # toggle touchpad
 
 # Media player controls
-bindsym XF86AudioPlay exec playerctl play
-bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
@@ -401,4 +393,25 @@ mode "$mode_gaps_outer" {
 
         bindsym Return mode "default"
         bindsym Escape mode "default"
+}
+
+output "*" bg ~/.wallpapers/544663.jpg fill
+
+# Set keyboard layouts
+input type:keyboard {
+        xkb_layout "us,sk"
+        xkb_variant ",qwerty"
+        xkb_options "grp:lctrl_lshift_toggle"
+        xkb_numlock enable
+        # repeat_delay 500
+        repeat_rate 50
+}
+
+input type:touchpad {
+      click_method clickfinger
+      dwt enabled
+      tap enabled
+      middle_emulation enabled
+      drag disabled
+      natural_scroll disabled
 }

@@ -540,6 +540,16 @@ menu-2-0-exec = sudo poweroff
 menu-2-1 = cancel
 menu-2-1-exec = menu-open-0
 
+
+[module/bandwidth]
+type = custom/script
+exec = ~/.scripts/bandwidth3/bandwidth3 -p "printf \" %-5.1f%5.1f %s/s\n\", rx, wx, unit;"
+; label = %output%
+tail = true
+interval = 1
+format-background = ${color.mb}
+format-foreground = ${color.primary}
+
 [module/updates]
 type = custom/script
 

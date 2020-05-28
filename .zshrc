@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 export PATH="/home/matus/Documents/sublime_text_3_build_3207_x64/sublime_text_3:$PATH"
-export PATH="/home/matus/.cargo/bin:$PATH"
+export PATH="/home/matus/.cargo/bin:/home/matus/.local/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/matus/.oh-my-zsh"
@@ -18,6 +18,9 @@ export POWERLEVEL9K_VCS_SHORTEN_LENGTH=4
 export POWERLEVEL9K_VCS_SHORTEN_MIN_LENGTH=11
 export POWERLEVEL9K_VCS_SHORTEN_STRATEGY="truncate_middle"
 export POWERLEVEL9K_VCS_SHORTEN_DELIMITER=".."
+
+export XKB_DEFAULT_LAYOUT=us,sk
+export XKB_DEFAULT_OPTIONS=grp:lctrl_lshift_toggle
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -77,7 +80,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git wd web-search man docker copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
+plugins=(git web-search man docker copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
 # (virtualenv)
 # (omz-git) Modify the console prompt play more nicely with our branch naming conventions
 # (z) Tracks your most used directories, based on 'frequency'.
@@ -179,8 +182,14 @@ alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 alias df='df -h'                            # human-readable sizes
-alias ll='ls -FGlAhp --group-directories-first --color=auto' # Preferred 'ls' implementation
-alias ls='ls -G --group-directories-first --color=auto' # Preferred directory listing
+# alias ll='ls -FGlAhp --group-directories-first --color=auto' # Preferred 'ls' implementation
+# alias ls='ls -G --group-directories-first --color=auto' # Preferred directory listing
+alias ls='exa --icons --group-directories-first'
+alias ll='exa --long --icons --color-scale --all --group-directories-first --git'
+alias lld='exa --long --all --only-dirs'
+alias llr='exa --long --icons --color-scale --all --group-directories-first --git --recurse --level=2'
+alias lls='exa --long --icons --color-scale --all --group-directories-first --git --sort=size'
+alias llt='exa --long --icons --color-scale --all --group-directories-first --git --sort=type'
 alias less='less -FSRXc'                    # Preferred 'less' implementation
 alias free='free -m'                        # show sizes in MB
 # cd() { builtin cd "$@"; ls */ -Gd --group-directories-first --color=auto; }               # Always list directory contents upon 'cd'
@@ -209,7 +218,7 @@ alias makei="make install -j$(nproc); alert" # makei:        Compile install tar
 alias makec='make clean'                    # makec:        Run clean make target
 alias make1='make -j$(nproc --ignore=1)'    # make1:        Compiler with all threads except one, let system keep some resources
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
-alias hey='cht.sh'                          # hey           Search for a given query
+hey() { tldr "$@" || cht.sh "$@"; }         # hey           Search for a given query
 
 #   lr:  Full Recursive Directory Listing
 #   ------------------------------------------
@@ -268,6 +277,10 @@ my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
 if [ -f ~/.local_bashrc ]; then
     source ~/.local_bashrc
 fi
+
+each () { find "$1" -type f -print | xargs -L1 -i sh -c "$2" ; }
+
+bumpv () { bump2version --dry-run --allow-dirty --verbose "$1"| grep --color=never "version"; read "?Is it ok? (Ctrl-C to storno)" && bump2version --allow-dirty "$1"; }
 
 ################ zoxide begin ####################
 _zoxide_precmd() {

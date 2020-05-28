@@ -11,6 +11,9 @@ sysmodmap=/etc/X11/xinit/.Xmodmap
 
 DEFAULT_SESSION=gnome-session
 
+WINIT_HIDPI_FACTOR=1
+WINIT_X11_SCALE_FACTOR=1
+
 # merge in defaults and keymaps
 
 if [ -f $sysresources ]; then

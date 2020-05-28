@@ -1,4 +1,3 @@
-
 #BROWSER='xdg-open $FILE &>/dev/null'
 EDITOR='emacsclient -t'
 #FILE_CMD='xdg-open'
@@ -20,7 +19,7 @@ NOTES_EXT=".org"
 # Command that opens notes. UUID will be replaced with the actual uuid of 
 # the task.
 # Default is: $EDITOR $NOTES_FILE
-#NOTES_CMD="vim "$HOME/tasknotes/$UUID.txt""
+#NOTES_CMD="emacsclient -t "$HOME/org/$UUID.txt""
 
 # Specify the default sorting.
 # Default is taskwarrior's default sorting, i.e. sorting by task IDs.
