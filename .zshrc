@@ -219,6 +219,7 @@ alias makec='make clean'                    # makec:        Run clean make targe
 alias make1='make -j$(nproc --ignore=1)'    # make1:        Compiler with all threads except one, let system keep some resources
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
 hey() { tldr "$@" || cht.sh "$@"; }         # hey           Search for a given query
+alias paci="pacman -Slq | fzf -m --preview 'pacman -Si {1}' | xargs -or sudo pacman -S"
 
 #   lr:  Full Recursive Directory Listing
 #   ------------------------------------------
@@ -278,7 +279,8 @@ if [ -f ~/.local_bashrc ]; then
     source ~/.local_bashrc
 fi
 
-each () { find "$1" -type f -print | xargs -L1 -i sh -c "$2" ; }
+# each () { find "$1" -type f -print | xargs -L1 -I{} sh -c "$2" ; }
+each () { fd . "$1" -t f -x sh -c "$2" ; }
 
 bumpv () { bump2version --dry-run --allow-dirty --verbose "$1"| grep --color=never "version"; read "?Is it ok? (Ctrl-C to storno)" && bump2version --allow-dirty "$1"; }
 
