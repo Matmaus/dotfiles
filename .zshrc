@@ -80,9 +80,10 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git web-search man docker copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
+plugins=(git vi-mode web-search man docker copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
 # (virtualenv)
 # (omz-git) Modify the console prompt play more nicely with our branch naming conventions
+# (vi-mode) => This plugin increase vi-like zsh functionality.
 # (z) Tracks your most used directories, based on 'frequency'.
 # (dircycle) => This plugin enables directory navigation similar to using back and forward on browsers or common file explorers like Finder or Nautilus.
 # <docker> => This plugin adds auto-completion for docker.
@@ -220,6 +221,9 @@ alias make1='make -j$(nproc --ignore=1)'    # make1:        Compiler with all th
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
 hey() { tldr "$@" || cht.sh "$@"; }         # hey           Search for a given query
 alias paci="pacman -Slq | fzf -m --preview 'pacman -Si {1}' | xargs -or sudo pacman -S"
+alias nf='fd . ~/org -e org | fzf | xargs -L1 -I{} sh -c "emacsclient -t {}"'
+# TODO
+# notes_find_and_open () { fd . ~/org -e org | rofi -dmenu -i | xargs -L1 -I{} sh -c "emacs {}" ; }
 
 #   lr:  Full Recursive Directory Listing
 #   ------------------------------------------
