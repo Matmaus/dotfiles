@@ -8,3 +8,4 @@ venv/
 *.pdf
 my_*
 .dir-locals.el
+.mypy_cache/

@@ -284,32 +284,15 @@ if [ -f ~/.local_bashrc ]; then
 fi
 
 # each () { find "$1" -type f -print | xargs -L1 -I{} sh -c "$2" ; }
+eachupto () { find "$1" -type f -print | head -n "$2" | xargs -L1 -I{} sh -c "$3" ; }
 each () { fd . "$1" -t f -x sh -c "$2" ; }
+# eachupto () { fd . "$1" --type f --max-results "$2" --exec sh -c "$3" ; }
+
 
 bumpv () { bump2version --dry-run --allow-dirty --verbose "$1"| grep --color=never "version"; read "?Is it ok? (Ctrl-C to storno)" && bump2version --allow-dirty "$1"; }
 
 ################ zoxide begin ####################
-_zoxide_precmd() {
-    zoxide add
-}
-
-[[ -n "${precmd_functions[(r)_zoxide_precmd]}" ]] || {
-    precmd_functions+=(_zoxide_precmd)
-}
-
-z() {
-    if [ $# -ne 0 ]; then
-        _Z_RESULT=$(zoxide query "$@")
-        case $_Z_RESULT in
-            "query: "*)
-                cd "${_Z_RESULT:7}"
-                ;;
-            *)
-                echo "${_Z_RESULT}"
-                ;;
-        esac
-    fi
-}
+eval "$(zoxide init zsh)"
 
 alias zi="z -i"
 
