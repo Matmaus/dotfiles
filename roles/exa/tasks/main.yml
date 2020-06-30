@@ -2,7 +2,7 @@
 ###############################################################################
 # EXA installation
 
-- name: EXA | Installs BAT | pacman
+- name: EXA | Installs EXA | pacman
   become: yes
   become_user: root
   pacman:

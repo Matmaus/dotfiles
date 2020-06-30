@@ -40,3 +40,12 @@
     - role: sway
       tags:
         - sway
+    - role: zoxide
+      tags:
+        - zoxide
+    - role: i3
+      tags:
+        - i3
+    - role: rofi
+      tags:
+        - rofi

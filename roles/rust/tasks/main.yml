@@ -1,0 +1,9 @@
+---
+###############################################################################
+# Rust installation
+
+- name: Rust | Installs rustup and cargo | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: rust

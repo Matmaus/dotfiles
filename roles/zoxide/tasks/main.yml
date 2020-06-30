@@ -1,0 +1,41 @@
+---
+###############################################################################
+# Zoxide installation
+
+- name: Zoxide | Installs Zoxide | rust
+  become: yes
+  become_user: root
+  command: cargo install zoxide
+
+- name: Checks for zsh installation | stat
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.zshrc"
+  register: zsh_stat
+
+- name: update | Update zshrc | command
+  blockinfile:
+    path: "{{ lookup('env', 'HOME') }}/.zshrc"
+    block: "{{ lookup('file', 'zoxide.zsh') }}"
+    insertafter: "# Generated"
+    marker_begin: " zoxide   <(BEGIN"
+    marker_end: " zoxide   <(END"
+    marker: "# {mark} ANSIBLE BLOCK)>"
+  when: zsh_stat.stat.exists
+
+- name: Insert new aliases
+  include_tasks: roles/_manage_aliases/tasks/main.yml
+
+- name: Checks for fish installation | stat
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.config/fish/config.fish"
+  register: fish_stat
+
+- name: update | Update fishrc | command
+  blockinfile:
+    path: "{{ lookup('env', 'HOME') }}/.config/fish/config.fish"
+    block: "{{ lookup('file', 'zoxide.fish') }}"
+    insertafter: "# Generated"
+    marker_begin: " zoxide   <(BEGIN"
+    marker_end: " zoxide   <(END"
+    marker: "# {mark} ANSIBLE BLOCK)>"
+  when: fish_stat.stat.exists

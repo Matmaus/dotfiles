@@ -1,0 +1,16 @@
+---
+###############################################################################
+# Rofi installation
+
+- name: Rofi | Installs rofi | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name: rofi
+
+- name: Rofi | Links rofi configuration | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/rofi/files/rofi.link"
+    dest: "{{ lookup('env', 'HOME') }}/.config/rofi"
+    state: link
+    force: yes

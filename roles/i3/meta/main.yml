@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: _config_dir }
+  - { role: yay }

@@ -1,0 +1,30 @@
+---
+###############################################################################
+# i3 installation
+
+- name: i3 | Installs i3 | pacman
+  become: yes
+  become_user: root
+  pacman:
+    name:
+        - i3-gaps
+        - i3lock
+
+- name: i3 | Links i3 directory | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/i3/files/i3.link"
+    dest: "{{ lookup('env', 'HOME') }}/.config/i3"
+    state: link
+    force: yes
+
+- name: polybar | Installs polybar | yay
+  become: yes
+  become_user: root
+  command: yay -S polybar
+
+- name: polybar | Links polybar directory | file
+  file:
+    src: "{{ lookup('env', 'HOME') }}/dotfiles/roles/i3/files/polybar.link"
+    dest: "{{ lookup('env', 'HOME') }}/.config/polybar"
+    state: link
+    force: yes

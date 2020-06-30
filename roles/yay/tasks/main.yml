@@ -1,0 +1,8 @@
+---
+###############################################################################
+# yay installation
+
+- name: yay | Installs yay | raw
+  become: yes
+  become_user: root
+  raw: git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
