@@ -4,6 +4,8 @@
 *.log
 tmp/
 venv/
+build/
+dist/
 .envrc
 *.pdf
 my_*

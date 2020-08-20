@@ -285,7 +285,7 @@ fi
 
 # each () { find "$1" -type f -print | xargs -L1 -I{} sh -c "$2" ; }
 eachupto () { find "$1" -type f -print | head -n "$2" | xargs -L1 -I{} sh -c "$3" ; }
-each () { fd . "$1" -t f -x sh -c "$2" ; }
+each () { fd . "$1" -t f -d 3 -x sh -c "$2" ; }
 # eachupto () { fd . "$1" --type f --max-results "$2" --exec sh -c "$3" ; }
 
 

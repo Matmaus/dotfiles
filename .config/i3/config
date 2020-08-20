@@ -58,7 +58,8 @@ floating_modifier $mod
 
 # start a terminal
 # bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec WINIT_X11_SCALE_FACTOR=1 alacritty
+bindsym $mod+Return exec WINIT_X11_SCALE_FACTOR=1 alacritty -e tmux new
+bindsym $mod+Shift+Return WINIT_X11_SCALE_FACTOR=1 exec alacritty -e tmux a
 
 # kill focused window
 bindsym $mod+Shift+q kill

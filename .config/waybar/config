@@ -70,7 +70,7 @@
         "format-icons": ["", "", "", "", ""]
     },
     "pulseaudio": {
-        "scroll-step": 5, // %, can be a float
+        //"scroll-step": 5, // %, can be a float
         "format": "{volume}% {icon}",
         "format-muted": "{volume}% ",
         "format-bluetooth": "{volume}% {icon}",
