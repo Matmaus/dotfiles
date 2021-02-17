@@ -1,6 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 export PATH="/home/matus/Documents/sublime_text_3_build_3207_x64/sublime_text_3:$PATH"
 export PATH="/home/matus/.cargo/bin:/home/matus/.local/bin:$PATH"
+export PATH="/home/matus/.npm-global:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/matus/.oh-my-zsh"
@@ -80,7 +81,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode web-search man docker copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
+plugins=(git web-search man docker copybuffer colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh_reload)
 # (virtualenv)
 # (omz-git) Modify the console prompt play more nicely with our branch naming conventions
 # (vi-mode) => This plugin increase vi-like zsh functionality.
@@ -221,7 +222,9 @@ alias make1='make -j$(nproc --ignore=1)'    # make1:        Compiler with all th
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
 hey() { tldr "$@" || cht.sh "$@"; }         # hey           Search for a given query
 alias paci="pacman -Slq | fzf -m --preview 'pacman -Si {1}' | xargs -or sudo pacman -S"
+alias yayi="yay -Slq | fzf -m --preview 'yay -Si {1}' | xargs -or yay -S"
 alias nf='fd . ~/org -e org | fzf | xargs -L1 -I{} sh -c "emacsclient -t {}"'
+alias srec='wf-recorder --audio --file="recording_"$(date)".mp4" -g "$(slurp)"'
 # TODO
 # notes_find_and_open () { fd . ~/org -e org | rofi -dmenu -i | xargs -L1 -I{} sh -c "emacs {}" ; }
 
@@ -288,8 +291,17 @@ eachupto () { find "$1" -type f -print | head -n "$2" | xargs -L1 -I{} sh -c "$3
 each () { fd . "$1" -t f -d 3 -x sh -c "$2" ; }
 # eachupto () { fd . "$1" --type f --max-results "$2" --exec sh -c "$3" ; }
 
-
 bumpv () { bump2version --dry-run --allow-dirty --verbose "$1"| grep --color=never "version"; read "?Is it ok? (Ctrl-C to storno)" && bump2version --allow-dirty "$1"; }
+
+ssa () {
+	# Startup the ssh-agent if not running
+    if [ -z "$SSH_AGENT_PID" ]; then
+        eval "$(ssh-agent)"
+    fi
+
+	KEY=$(fd 'id_[a-zA-Z0-9-_]*$' ~/.ssh/ | fzf --height 5 --prompt "Select a key to add: " --layout=reverse)
+	ssh-add "$KEY";
+}
 
 ################ zoxide begin ####################
 eval "$(zoxide init zsh)"

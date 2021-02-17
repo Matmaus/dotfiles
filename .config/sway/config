@@ -153,6 +153,7 @@ bindsym $mod+Tab workspace back_and_forth
 # Startup Programs
 exec --no-startup-id pactl set-sink-mute 0 1 # mute volume
 exec --no-startup-id pactl set-sink-volume 0 10% # set default volume
+exec --no-startup-id brightnessctl set 30% # set default brightness
 exec --no-startup-id nm-applet --indicator
 exec --no-startup-id blueman-applet
 exec --no-startup-id emacs --daemon
@@ -215,9 +216,11 @@ for_window [title="Firefox - Sharing Indicator"] floating enable
 
 assign [class="(?i)Chromium"] $workspace1
 assign [class="(?i)Firefox"] $workspace1
+assign [class="(?i)Brave-browser"] $workspace1
 # assign [class="(?i)Emacs"] $workspace2
 assign [class="(?i)Spotify"] $workspace8
 assign [class="(?i)Slack"] $workspace10
+assign [class="(?i)Element"] $workspace10
 
 workspace $workspace1 output DP2-2 eDP1
 workspace $workspace2 output HDMI1 eDP1
@@ -341,6 +344,8 @@ bindsym XF86AudioPrev exec playerctl previous
 # Fix Nautilius issue on Ubuntu
 exec_always gsettings set org.gnome.desktop.background show-desktop-icons false
 exec_always gsettings set org.nemo.desktop show-desktop-icons false
+
+# tyling_grag eabled
 
 #############################
 ### settings for i3-gaps: ###

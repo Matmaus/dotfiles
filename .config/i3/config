@@ -222,7 +222,6 @@ for_window [class="Pavucontrol"] floating enable
 
 assign [class="(?i)Chromium"] $workspace1
 assign [class="(?i)Firefox"] $workspace1
-assign [class="(?i)Emacs"] $workspace2
 assign [class="(?i)jetbrains-idea-ce"] $workspace2
 assign [class="(?i)Spotify"] $workspace8
 assign [class="(?i)Slack"] $workspace10
